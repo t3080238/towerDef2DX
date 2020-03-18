@@ -316,7 +316,7 @@
       "__uuid__": "2a845250-2821-4149-b6a2-107d4b96a6ee"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -337,8 +337,8 @@
       "__id__": 1
     },
     "_enabled": true,
+    "costMoney": 1000,
     "bulletsNumber": 5,
-    "attack": 20,
     "shootDistance": 120,
     "shootFrequency": 3,
     "_id": ""

@@ -4,11 +4,16 @@ const { ccclass, property } = cc._decorator;
 export default class WeaponControl extends cc.Component {
     @property(cc.Node)
     private waeponParent: cc.Node = null;
+    @property(cc.Label)
+    private remainMoney: cc.Label = null;
+    @property(cc.Label)
+    private totalPay: cc.Label = null;
 
     private enemyParent: cc.Node = null;
     private newWeapon: cc.Node = null;
     // LIFE-CYCLE CALLBACKS:
     private damageTimer: number = 0;
+    public randArray = {};
 
     onLoad() {
         for (let i = 1; i <= 3; i++) {
@@ -18,7 +23,28 @@ export default class WeaponControl extends cc.Component {
                 this.setButton(weaponBtn, i);
             });
         }
-        this.enemyParent = this.node.parent.getChildByName('enemyControl')
+        this.enemyParent = this.node.parent.getChildByName('enemyControl');
+
+        // 載入機率資料
+        // @ts-ignore
+        let weaponData = require('./weaponData').default;
+        console.log(weaponData);
+
+        // weapon1~weapon3
+        for (let key in weaponData) {
+            let attackRand = weaponData[key].attackRand;
+            let totalWeight = 0;
+            this.randArray[key] = [];
+            for (let attackNum in attackRand) {
+                let weight = attackRand[attackNum];
+                let attackValue = Number(attackNum);
+                for (let i = totalWeight; i < totalWeight + weight; i++) {
+                    console.log(key, i, attackValue);
+                    this.randArray[key][i] = attackValue;
+                }
+                totalWeight += weight;
+            }
+        }
     }
 
     start() {
@@ -61,8 +87,15 @@ export default class WeaponControl extends cc.Component {
         if (!this.newWeapon) return;
         this.newWeapon.x = event.getLocationX();
         this.newWeapon.y = event.getLocationY();
-        this.newWeapon.getComponent('weapon').putWeapon();
+        if (this.newWeapon.y < 120 || this.newWeapon.y > 560 || this.newWeapon.x > 880) {
+            this.removeWeapon();
+            return;
+        }
+        let costMoney = this.newWeapon.getComponent('weapon').putWeapon();
+        let nowMoney = Number(this.remainMoney.string);
+        this.remainMoney.string = `${nowMoney - costMoney}`
         this.newWeapon = null;
+        this.totalPay.string = `${Number(this.totalPay.string) + costMoney}`
     }
 
     removeWeapon() {

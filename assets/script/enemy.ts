@@ -3,16 +3,18 @@ const { ccclass, property } = cc._decorator;
 @ccclass
 export default class Enemy extends cc.Component {
     @property(cc.Integer)
+    winMoney: number = 0;
+    @property(cc.Integer)
     speed: number = 0;
     @property(cc.Integer)
     private maxHp: number = 1;
-
     @property
     text: string = 'hello';
 
     private hp = 0;
     private hpBar: cc.Node = null;
     private hpLine: cc.Node = null;
+    private hpNum: cc.Label = null;
 
     // LIFE-CYCLE CALLBACKS:
     constructor() {
@@ -22,6 +24,7 @@ export default class Enemy extends cc.Component {
     onLoad () {
         this.hpBar = this.node.getChildByName('hpBar');
         this.hpLine = this.hpBar.getChildByName('hpLine');
+        this.hpNum = this.hpBar.getChildByName('hpNum').getComponent(cc.Label);
     }
 
     start() {
@@ -49,8 +52,9 @@ export default class Enemy extends cc.Component {
         this.hp = hpValue < 0 ? 0 : hpValue;
         this.hp = hpValue > this.maxHp ? this.maxHp : this.hp;
         this.hpLine.width = Math.ceil(this.hp / this.maxHp * (this.hpBar.width - 4));
+        this.hpNum.string = `${this.hp}`;
         if (this.hp > 0) return;
-        this.node.parent.removeChild(this.node);
+        this.node.parent.getComponent('enemyControl').enemyDead(this);
     }
 
     public damage(dmgValue) {

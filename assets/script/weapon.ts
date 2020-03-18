@@ -1,18 +1,14 @@
-// Learn TypeScript:
-//  - https://docs.cocos.com/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - https://docs.cocos.com/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
-
+import TweenMax from "./TweenMax.min.js"
 const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class Weapon extends cc.Component {
     @property(cc.Integer)
-    bulletsNumber: number = 0;
+    costMoney: number = 0;
     @property(cc.Integer)
-    attack: number = 0;
+    bulletsNumber: number = 0;
+    // @property(cc.Integer)
+    // attack: number = 0;
     @property(cc.Integer)
     shootDistance: number = 0;
     @property(cc.Float)
@@ -20,6 +16,7 @@ export default class Weapon extends cc.Component {
 
     private attackTimer: number = 0;
     private numberLabel: cc.Label
+    private randArray: Number[] = []
 
     onLoad() {
     }
@@ -30,6 +27,9 @@ export default class Weapon extends cc.Component {
         attackArea.height = this.shootDistance * 2;
         this.numberLabel = this.node.getChildByName('numberLabel').getComponent(cc.Label);
         this.updateLabel();
+        console.log(this.node.name);
+        this.randArray = this.node.parent.parent.getChildByName('weaponControl').getComponent('weaponControl').randArray[this.node.name];
+        console.log(this.randArray);
     }
 
     // update (dt) {}
@@ -48,7 +48,8 @@ export default class Weapon extends cc.Component {
                 let distY = this.node.y - enemy.y;
                 let dist = Math.sqrt(distX * distX + distY * distY) - enemy.width / 2;
                 if (dist <= this.shootDistance) {
-                    enemy.getComponent('enemy').damage(this.attack);
+                    let attack = this.getAttack();
+                    enemy.getComponent('enemy').damage(attack);
                     this.attackTimer = Date.now();
                     this.bulletsNumber -= 1;
                     this.updateLabel();
@@ -56,28 +57,25 @@ export default class Weapon extends cc.Component {
                     break;
                 }
             }
-            // enemyParent.children.forEach((enemy) => {
-            //     let distX = this.node.x - enemy.x;
-            //     let distY = this.node.y - enemy.y;
-            //     let dist = Math.sqrt(distX * distX + distY * distY) - enemy.width / 2;
-            //     if (dist <= this.shootDistance) {
-            //         enemy.getComponent('enemy').damage(this.attack);
-            //         this.attackTimer = Date.now();
-            //         this.bulletsNumber -= 1;
-            //         this.updateLabel();
-            //         if (this.bulletsNumber <= 0) this.node.parent.removeChild(this.node);
-            //         console.log(123);
-            //     }
-            //     return;
-            // })
         }
     }
 
+    shootBullet() {
+        // let tl = new TweenMax();
+    }
+
     putWeapon() {
-        this.attackTimer = Date.now();
+        this.attackTimer = 1;
+        this.shootBullet();
+        return this.costMoney;
     }
 
     updateLabel() {
         this.numberLabel.string = `${this.bulletsNumber}`;
+    }
+
+    getAttack(): Number {
+        let randNum = Math.floor(Math.random() * this.randArray.length);
+        return randNum;
     }
 }

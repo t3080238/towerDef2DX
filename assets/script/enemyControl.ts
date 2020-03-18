@@ -6,7 +6,11 @@ const { ccclass, property } = cc._decorator;
 export default class EnemyControl extends cc.Component {
     @property(cc.Float)
     private frequence: number = 1000;
-
+    @property(cc.Label)
+    private remainMoney: cc.Label = null;
+    @property(cc.Label)
+    private totalWin: cc.Label = null;
+    // @property([cc.Prefab])
     private enemyPrefab: cc.Prefab[] = [];
     private timer: number = 0;
     // private damageTimer: number = 0;
@@ -40,5 +44,13 @@ export default class EnemyControl extends cc.Component {
         let rand = Math.floor(Math.random() * 6);
         let enemy = cc.instantiate(this.enemyPrefab[rand]);
         this.node.addChild(enemy);
+    }
+
+    public enemyDead(enemy: Enemy) {
+        this.node.removeChild(enemy.node);
+        let winMoney = enemy.winMoney;
+        let nowMoney = Number(this.remainMoney.string);
+        this.remainMoney.string = `${nowMoney + winMoney}`
+        this.totalWin.string = `${Number(this.totalWin.string) + winMoney}`
     }
 }

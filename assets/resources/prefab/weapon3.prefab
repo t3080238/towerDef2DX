@@ -337,8 +337,8 @@
       "__id__": 1
     },
     "_enabled": true,
+    "costMoney": 1000,
     "bulletsNumber": 20,
-    "attack": 5,
     "shootDistance": 100,
     "shootFrequency": 0.2,
     "_id": ""
