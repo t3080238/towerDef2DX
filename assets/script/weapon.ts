@@ -91,8 +91,16 @@ export default class Weapon extends cc.Component {
                 }
             }
         );
-        bullet.rotationX = this.node.x - target.x
-        bullet.rotationY = this.node.y - target.y
+        // 计算出朝向
+        let distX = this.node.x - target.x;
+        let distY = this.node.y - target.y;
+        let dir = cc.v2(distX, distY)
+        // 根据朝向计算出夹角弧度
+        let angle = dir.signAngle(cc.v2(0, 1));
+        // 将弧度转换为欧拉角
+        let degree = angle / Math.PI * 180;
+        //赋值给节点
+        bullet.rotation = degree;
     }
 
     putWeapon() {
