@@ -95,7 +95,7 @@ export default class Weapon extends cc.Component {
         let distX = this.node.x - target.x;
         let distY = this.node.y - target.y;
         let dir = cc.v2(distX, distY)
-        // 根据朝向计算出夹角弧度
+        // 根据朝向计算出夹角弧度(不用cc.v2(1, 0)是因為0度子彈的角度錯了)
         let angle = dir.signAngle(cc.v2(0, 1));
         // 将弧度转换为欧拉角
         let degree = angle / Math.PI * 180;
