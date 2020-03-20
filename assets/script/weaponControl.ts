@@ -1,21 +1,35 @@
 const { ccclass, property } = cc._decorator;
-
+import WeaponData from './weaponData'
+import EnemyParent from './enemyControl'
+import Weapon from './weapon'
 @ccclass
 export default class WeaponControl extends cc.Component {
+    private game;
     @property(cc.Node)
     private waeponParent: cc.Node = null;
     @property(cc.Label)
     private remainMoney: cc.Label = null;
     @property(cc.Label)
     private totalPay: cc.Label = null;
+    @property(cc.Node)
+    private bulletControl: cc.Node;
+    // @property(cc.Node)
+    // private enemyControl: cc.Node = null;
 
-    private enemyParent: cc.Node = null;
     private newWeapon: cc.Node = null;
     // LIFE-CYCLE CALLBACKS:
     private damageTimer: number = 0;
     public randArray = {};
 
+    init() {
+    }
+
     onLoad() {
+        // @ts-ignore
+        this.game = require('game');
+
+        console.log(this.game);
+
         for (let i = 1; i <= 3; i++) {
             cc.loader.loadRes(`prefab/weaponBtn${i}`, cc.Prefab, (err, prefab) => {
                 let weaponBtn = cc.instantiate(prefab);
@@ -23,12 +37,9 @@ export default class WeaponControl extends cc.Component {
                 this.setButton(weaponBtn, i);
             });
         }
-        this.enemyParent = this.node.parent.getChildByName('enemyControl');
 
         // 載入機率資料
-        // @ts-ignore
-        let weaponData = require('./weaponData').default;
-        console.log(weaponData);
+        let weaponData = WeaponData;
 
         // weapon1~weapon3
         for (let key in weaponData) {
@@ -39,12 +50,14 @@ export default class WeaponControl extends cc.Component {
                 let weight = attackRand[attackNum];
                 let attackValue = Number(attackNum);
                 for (let i = totalWeight; i < totalWeight + weight; i++) {
-                    console.log(key, i, attackValue);
                     this.randArray[key][i] = attackValue;
                 }
                 totalWeight += weight;
             }
         }
+
+        this.game.bulletControl = this.bulletControl;
+        this.game.randArray = this.randArray;
     }
 
     start() {
@@ -57,7 +70,7 @@ export default class WeaponControl extends cc.Component {
         if (Date.now() - this.damageTimer >= 200) {
             this.waeponParent.children.forEach((weapon) => {
                 // console.log(this.node.parent.getChildByName('enemyControl'));
-                weapon.getComponent('weapon').checkAttack(this.enemyParent);
+                weapon.getComponent(Weapon).checkAttack(this.game.enemyControl.node);
             });
             this.damageTimer = Date.now();
         }
@@ -71,6 +84,12 @@ export default class WeaponControl extends cc.Component {
         cc.loader.loadRes(`prefab/weapon${index}`, cc.Prefab, (err, prefab) => {
             this.newWeapon = cc.instantiate(prefab);
             this.waeponParent.addChild(this.newWeapon);
+            this.newWeapon.getComponent(Weapon).init(this.game, `weapon${index}`);
+            this.newWeapon.on('start', (evevt)=> {
+                console.log('event');
+                console.log('event', evevt);
+            })
+
             this.newWeapon.x = event.getLocationX();
             this.newWeapon.y = event.getLocationY();
             this.newWeapon.on('touchcancel', (event) => { this.removeWeapon(); })
@@ -91,7 +110,7 @@ export default class WeaponControl extends cc.Component {
             this.removeWeapon();
             return;
         }
-        let costMoney = this.newWeapon.getComponent('weapon').putWeapon();
+        let costMoney = this.newWeapon.getComponent(Weapon).putWeapon();
         let nowMoney = Number(this.remainMoney.string);
         this.remainMoney.string = `${nowMoney - costMoney}`
         this.newWeapon = null;

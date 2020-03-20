@@ -4,6 +4,7 @@ const { ccclass, property } = cc._decorator;
 
 @ccclass
 export default class EnemyControl extends cc.Component {
+    private game;
     @property(cc.Float)
     private frequence: number = 1000;
     @property(cc.Label)
@@ -16,6 +17,9 @@ export default class EnemyControl extends cc.Component {
     // private damageTimer: number = 0;
 
     onLoad() {
+        // @ts-ignore
+        this.game = require('game');
+        this.game.enemyControl = this;
         for (let i = 0; i < 6; i++) {
             cc.loader.loadRes(`prefab/enemy${i + 1}`, cc.Prefab, (err, prefab) => {
                 this.enemyPrefab[i] = prefab;
@@ -25,6 +29,7 @@ export default class EnemyControl extends cc.Component {
 
     start() {
         this.timer = Date.now();
+        console.log(cc.game);
     }
 
     update(dt) {

@@ -337,10 +337,10 @@
       "__id__": 1
     },
     "_enabled": true,
-    "costMoney": 1000,
+    "costMoney": 100,
     "bulletsNumber": 5,
     "shootDistance": 120,
-    "shootFrequency": 3,
+    "shootFrequency": 1,
     "_id": ""
   },
   {

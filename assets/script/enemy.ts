@@ -15,6 +15,7 @@ export default class Enemy extends cc.Component {
     private hpBar: cc.Node = null;
     private hpLine: cc.Node = null;
     private hpNum: cc.Label = null;
+    private damageText: cc.Label = null;
 
     // LIFE-CYCLE CALLBACKS:
     constructor() {
@@ -25,6 +26,7 @@ export default class Enemy extends cc.Component {
         this.hpBar = this.node.getChildByName('hpBar');
         this.hpLine = this.hpBar.getChildByName('hpLine');
         this.hpNum = this.hpBar.getChildByName('hpNum').getComponent(cc.Label);
+        this.damageText = this.hpBar.getChildByName('damage').getComponent(cc.Label);
     }
 
     start() {
@@ -58,6 +60,7 @@ export default class Enemy extends cc.Component {
     }
 
     public damage(dmgValue) {
+        this.damageText.string = `-${dmgValue}`;
         this.setHp(this.hp - dmgValue);
     }
 }

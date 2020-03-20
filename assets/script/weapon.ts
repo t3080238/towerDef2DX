@@ -1,4 +1,6 @@
-import TweenMax from "./TweenMax.min.js"
+// import TweenMax from "./TweenMax.min.js"
+import WeaponControl from './weaponControl'
+
 const { ccclass, property } = cc._decorator;
 
 @ccclass
@@ -14,22 +16,33 @@ export default class Weapon extends cc.Component {
     @property(cc.Float)
     shootFrequency: number = 0;
 
+    private game;
     private attackTimer: number = 0;
     private numberLabel: cc.Label
-    private randArray: Number[] = []
+    private randArray: Number[] = [];
+    private bulletPrefab: cc.Prefab;
+    private bulletControl: cc.Node;
 
     onLoad() {
+        console.log('onLoad');
+        cc.loader.loadRes(`prefab/bullet`, cc.Prefab, (err, prefab) => {
+            this.bulletPrefab = prefab;
+        });
+    }
+
+    init(game, weaponName) {
+        this.game = game;
+        console.log('init');
+        this.randArray = this.game.randArray[weaponName];
     }
 
     start() {
+        console.log('start');
         let attackArea = this.node.getChildByName('attackArea');
         attackArea.width = this.shootDistance * 2;
         attackArea.height = this.shootDistance * 2;
         this.numberLabel = this.node.getChildByName('numberLabel').getComponent(cc.Label);
         this.updateLabel();
-        console.log(this.node.name);
-        this.randArray = this.node.parent.parent.getChildByName('weaponControl').getComponent('weaponControl').randArray[this.node.name];
-        console.log(this.randArray);
     }
 
     // update (dt) {}
@@ -48,8 +61,7 @@ export default class Weapon extends cc.Component {
                 let distY = this.node.y - enemy.y;
                 let dist = Math.sqrt(distX * distX + distY * distY) - enemy.width / 2;
                 if (dist <= this.shootDistance) {
-                    let attack = this.getAttack();
-                    enemy.getComponent('enemy').damage(attack);
+                    this.shootBullet(enemy);
                     this.attackTimer = Date.now();
                     this.bulletsNumber -= 1;
                     this.updateLabel();
@@ -60,13 +72,31 @@ export default class Weapon extends cc.Component {
         }
     }
 
-    shootBullet() {
-        // let tl = new TweenMax();
+    shootBullet(target) {
+        let bullet = cc.instantiate(this.bulletPrefab);
+        this.game.bulletControl.addChild(bullet);
+        TweenMax.fromTo(bullet, 0.1,
+            {
+                x: this.node.x,
+                y: this.node.y
+            },
+            {
+                x: target.x,
+                y: target.y,
+                ease: Power0.easeInOut,
+                onComplete: () => {
+                    let attack = this.getAttack();
+                    this.game.bulletControl.removeChild(bullet);
+                    target.getComponent('enemy').damage(attack);
+                }
+            }
+        );
+        bullet.rotationX = this.node.x - target.x
+        bullet.rotationY = this.node.y - target.y
     }
 
     putWeapon() {
         this.attackTimer = 1;
-        this.shootBullet();
         return this.costMoney;
     }
 
@@ -76,6 +106,6 @@ export default class Weapon extends cc.Component {
 
     getAttack(): Number {
         let randNum = Math.floor(Math.random() * this.randArray.length);
-        return randNum;
+        return this.randArray[randNum];
     }
 }
