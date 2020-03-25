@@ -9,10 +9,14 @@ export default class Boot extends cc.Component {
     @property
     text: string = 'hello';
 
+    private ani : cc.Animation;
+
     onLoad () {
         // cc.view.setDesignResolutionSize(1920, 1080, cc.ResolutionPolicy.SHOW_ALL);
         console.log('Boot');
         console.log(cc.sys);
+
+        this.ani = new cc.Animation();
 
         ///////////////////
         // this.node.on('init', (event) =>  this.init(event.detail) );

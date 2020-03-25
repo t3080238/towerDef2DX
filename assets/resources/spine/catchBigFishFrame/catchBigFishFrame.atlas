@@ -1,0 +1,41 @@
+
+catchBigFishFrame.png
+size: 1024,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+pic_win_frame
+  rotate: false
+  xy: 2, 80
+  size: 392, 392
+  orig: 400, 400
+  offset: 4, 1
+  index: -1
+pic_win_litball
+  rotate: false
+  xy: 396, 196
+  size: 276, 276
+  orig: 276, 276
+  offset: 0, 0
+  index: -1
+pic_win_particle
+  rotate: false
+  xy: 674, 101
+  size: 191, 177
+  orig: 191, 181
+  offset: 0, 0
+  index: -1
+pic_win_shine
+  rotate: false
+  xy: 674, 280
+  size: 194, 192
+  orig: 194, 194
+  offset: 0, 1
+  index: -1
+pic_win_star
+  rotate: false
+  xy: 396, 2
+  size: 193, 192
+  orig: 200, 200
+  offset: 4, 4
+  index: -1

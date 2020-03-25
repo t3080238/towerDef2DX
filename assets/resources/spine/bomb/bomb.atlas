@@ -1,0 +1,55 @@
+
+bomb.png
+size: 2048,512
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+7000010_pic_Buddha_hand
+  rotate: false
+  xy: 404, 32
+  size: 235, 370
+  orig: 236, 370
+  offset: 0, 0
+  index: -1
+7000010_pic_Buddha_hand_add
+  rotate: false
+  xy: 641, 32
+  size: 235, 370
+  orig: 236, 370
+  offset: 0, 0
+  index: -1
+7000010_pic_Buddha_hand_flare01
+  rotate: false
+  xy: 1115, 152
+  size: 250, 250
+  orig: 250, 250
+  offset: 0, 0
+  index: -1
+7000010_pic_Buddha_hand_flare02
+  rotate: false
+  xy: 1576, 214
+  size: 179, 188
+  orig: 180, 188
+  offset: 0, 0
+  index: -1
+7000010_pic_Buddha_hand_flare03
+  rotate: false
+  xy: 2, 2
+  size: 400, 400
+  orig: 400, 400
+  offset: 0, 0
+  index: -1
+7000010_pic_Buddha_hand_wan
+  rotate: false
+  xy: 1367, 191
+  size: 207, 211
+  orig: 208, 212
+  offset: 0, 1
+  index: -1
+7000010_pic_symbol_m40_hand
+  rotate: false
+  xy: 878, 32
+  size: 235, 370
+  orig: 236, 370
+  offset: 0, 0
+  index: -1
