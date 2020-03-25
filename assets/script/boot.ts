@@ -18,6 +18,11 @@ export default class Boot extends cc.Component {
 
         this.ani = new cc.Animation();
 
+        setTimeout(() => {
+            console.log('change animation');
+            // cc.director.loadScene('animation');
+        }, 60000)
+
         ///////////////////
         // this.node.on('init', (event) =>  this.init(event.detail) );
         // var node = cc.instantiate(prefab);
@@ -33,6 +38,10 @@ export default class Boot extends cc.Component {
         ///////////////////
 
         ///////////////////
+    }
+
+    onDestroy () {
+
     }
 
     start () {

@@ -72,6 +72,9 @@ export default class Weapon extends cc.Component {
         }
     }
 
+    onDestroy() {
+    }
+
     shootBullet(target) {
         let bullet = cc.instantiate(this.bulletPrefab);
         this.game.bulletControl.addChild(bullet);
