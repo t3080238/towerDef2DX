@@ -26,10 +26,17 @@ export default class WebSocket {
 
     sendWs(key: string) {
         const send = (data) => {
+            this.game.server.getData(data);
         }
 
         let data;
         switch (key) {
+            case 'login':
+                data = {
+                    key: 'login'
+                }
+                send(data);
+                break;
             case 'setWeapon':
                 send(data);
                 break;
